@@ -35,8 +35,28 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('product', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->bigIncrements('id');
+            $table->string('code', 50);
+            $table->text('name');
+            $table->text('short_description');
+            $table->text('long_description');
+            $table->decimal('price',19 ,4);
+            $table->decimal('sale_price', 19,4);
+            $table->text('quantity');
+            $table->text('brand', 150);
+            $table->boolean('is_cod');
+            $table->integer('package_height');
+            $table->integer('package_length');
+            $table->integer('package_weight');
+            $table->integer('package_width');
+            $table->text('warranty_description');
+            $table->text('warranty_policy');
+            $table->text('image_small');
+            $table->text('image_thumb');
+            $table->text('image_original');
+            $table->timestamp('created_at');
+            $table->timestamp('updated_at');
+            $table->integer('created_by');
         });
     }
 
