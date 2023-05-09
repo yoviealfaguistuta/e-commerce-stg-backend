@@ -16,11 +16,14 @@ class ProductType extends Model
         'name',
         'description',
         'tag',
-        'image_small',
-        'image_thumb',
-        'image_original',
+        'image',
         'created_at',
         'updated_at',
         'created_by',
+    ];
+
+    protected $casts = [
+        'created_at' => 'timestamp',
+        'updated_at' => 'timestamp',
     ];
 }

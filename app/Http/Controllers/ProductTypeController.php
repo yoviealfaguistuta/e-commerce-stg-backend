@@ -10,12 +10,6 @@ class ProductTypeController extends Controller
     public function index()
     {
         $data = ProductType::get();
-
-        $response = [
-            'data'    => $data,
-            'message' => 'OK',
-        ];
-
-        return response()->json($response, 200);
+        return $this->customResponse($data, 'OK', 200);
     }
 }

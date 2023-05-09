@@ -11,12 +11,6 @@ class ProductCategoryController extends Controller
     public function index()
     {
         $data = ProductCategory::get();
-
-        $response = [
-            'data'    => $data,
-            'message' => 'OK',
-        ];
-
-        return response()->json($response, 200);
+        return $this->customResponse($data, 'OK', 200);
     }
 }

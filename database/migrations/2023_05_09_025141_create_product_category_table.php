@@ -29,9 +29,7 @@ return new class extends Migration
             $table->text('name');
             $table->text('description');            
             $table->string('tag', 150);
-            $table->text('image_small');
-            $table->text('image_thumb');
-            $table->text('image_original');
+            $table->text('image');
             $table->timestamp('created_at');
             $table->timestamp('updated_at');
             $table->integer('created_by');

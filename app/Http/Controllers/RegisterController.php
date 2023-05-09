@@ -1,7 +1,8 @@
 <?php
    
 namespace App\Http\Controllers;
-   
+
+use App\Models\EmailVerification;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -23,28 +24,16 @@ class RegisterController extends Controller
         ]);
    
         if($validator->fails()){
-            $response = [
-                'success' => true,
-                'data'    => $validator->errors(),
-                'message' => 'Validation Error',
-            ];
-    
-            return response()->json($response, 500);
+            return $this->customResponse($validator->errors(), 'Data yang dikirim tidak valid', 422);
         }
 
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
-        $success['token'] =  $user->createToken('MyApp')->plainTextToken;
-        $success['name'] =  $user->name;
-   
-        $response = [
-            'success' => true,
-            'data'    => $success,
-            'message' => 'User register successfully',
-        ];
+        $data['token'] =  $user->createToken('MyApp')->plainTextToken;
+        $data['name'] =  $user->name;
 
-        return response()->json($response, 200);
+        return $this->customResponse($data, 'Pengguna berhasil didaftarkan', 200);
     }
    
     /**
@@ -54,39 +43,34 @@ class RegisterController extends Controller
      */
     public function login(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+   
+        if($validator->fails()){
+            return $this->customResponse($validator->errors(), 'Data yang dikirim tidak valid', 422);
+        }
+        
+        
+        
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
             $user = Auth::user(); 
-            $success['token'] =  $user->createToken('MyApp')->plainTextToken; 
-            $success['name'] =  $user->name;
-   
-            $response = [
-                'success' => true,
-                'data'    => $success,
-                'message' => 'User login successfully',
-            ];
-    
-            return response()->json($response, 200);
+
+            if (!EmailVerification::where([['user_id', $user->id] , ['validation', true]])->exists()) {
+                return $this->customResponse(false, 'Pengguna belum terdaftar | Code', 500);
+            }
+
+            $data['token'] =  $user->createToken('MyApp')->plainTextToken; 
+            $data['name'] =  $user->name;
+            return $this->customResponse($data, 'Berhasil login', 200);
         } 
-        else{ 
-            $response = [
-                'success' => true,
-                'data'    => 'Unauthorised',
-                'message' => 'Unauthorised',
-            ];
-    
-            return response()->json($response, 422);
-        } 
+        return $this->customResponse(false, 'username atau password tidak ditemukan', 422);
     }
 
     public function check(Request $request)
     {
         $request->user();
-        $response = [
-            'success' => true,
-            'data'    => auth('sanctum')->user(),
-            'message' => 'OK',
-        ];
-
-        return response()->json($response, 200);
+        return $this->customResponse(auth('sanctum')->user(), 'OK', 200);
     }
 }
