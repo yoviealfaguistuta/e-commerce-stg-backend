@@ -29,7 +29,7 @@ class ProductController extends Controller
         )
         ->join('product_category', 'product_category.id', '=', 'product.category_id')
         ->join('product_type', 'product_type.id', '=', 'product.type_id')
-        ->get();
+        ->paginate(20);
         return $this->customResponse($data, 'OK', 200);
     }
 

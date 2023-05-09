@@ -30,10 +30,10 @@ class RegisterController extends Controller
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
-        $data['token'] =  $user->createToken('MyApp')->plainTextToken;
-        $data['name'] =  $user->name;
+        // $data['token'] =  $user->createToken('MyApp')->plainTextToken;
+        // $data['name'] =  $user->name;
 
-        return $this->customResponse($data, 'Pengguna berhasil didaftarkan', 200);
+        return $this->customResponse($user, 'Pengguna berhasil didaftarkan', 200);
     }
    
     /**

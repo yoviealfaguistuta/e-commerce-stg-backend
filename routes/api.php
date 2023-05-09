@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductTypeController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\WishlistController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,5 +33,18 @@ Route::prefix('product')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/check', [RegisterController::class, 'check']);
+    Route::prefix('strict')->group(function () {
+        Route::get('/check', [RegisterController::class, 'check']);
+        
+        Route::prefix('cart')->group(function () {
+            Route::get('/', [CartController::class, 'index']);
+            Route::post('/{product_id}', [CartController::class, 'create']);
+        });
+
+        Route::prefix('wishlist')->group(function () {
+            Route::get('/', [WishlistController::class, 'index']);
+            Route::post('/{product_id}', [WishlistController::class, 'create']);
+        });
+    });
+    
 });
