@@ -24,8 +24,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('product_type', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->bigIncrements('id');
+            $table->string('code', 50);
+            $table->text('name');
+            $table->text('description');            
+            $table->string('tag', 150);
+            $table->text('image_small');
+            $table->text('image_thumb');
+            $table->text('image_original');
+            $table->timestamp('created_at');
+            $table->timestamp('updated_at');
+            $table->integer('created_by');
         });
     }
 
