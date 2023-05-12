@@ -18,4 +18,9 @@ class ProductSpecification extends Model
         'name',
         'value',
     ];
+
+    public function product(){
+        return $this->belongsTo(Product::class,'product_id');
+    }
 }
+

@@ -12,4 +12,5 @@ class ProductTypeController extends Controller
         $data = ProductType::get();
         return $this->customResponse($data, 'OK', 200);
     }
+    
 }

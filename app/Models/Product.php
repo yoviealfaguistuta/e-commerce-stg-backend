@@ -38,4 +38,8 @@ class Product extends Model
         'updated_at' => 'timestamp',
         'sale_end_time' => 'timestamp'
     ];
+
+    public function product_specification(){
+        return $this->hasMany(ProductSpecification::class);
+    }
 }
